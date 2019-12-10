@@ -1,5 +1,8 @@
+'use strict';
+
 const path = require('path');
-const HtmlWebPackPlugin = require("html-webpack-plugin");
+const { VueLoaderPlugin } = require('vue-loader');
+const HtmlWebPackPlugin = require('html-webpack-plugin');
 
 module.exports = {
     entry: {
@@ -13,24 +16,25 @@ module.exports = {
     module: {
         rules: [
             {
+                test: /\.vue$/,
+                use: 'vue-loader'
+            },
+            {
                 test: /\.js$/,
-                use: {
-                    loader: "babel-loader"
-                },
+                use: 'babel-loader',
                 exclude: /node_modules/
             },
             {
                 test: /\.html$/,
-                use: {
-                    loader: "html-loader"
-                }
+                use: 'html-loader'
             }
         ]
     },
     plugins: [
         new HtmlWebPackPlugin({
-            template: "./src/index.html",
-            filename: "./index.html"
-        })
+            template: 'src/index.html',
+            filename: 'index.html'
+        }),
+        new VueLoaderPlugin()
     ]
 };

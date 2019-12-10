@@ -1,8 +1,10 @@
-const databaseName = "statistics";
-const historyTableName = "history";
+import Vue from 'vue';
+import App from './App.vue'
 
-const statsSection = $(".stats-section");
-const importSection = $(".import-section");
+export const alaSqlPromise = import(/* webpackChunkName: "alasql" */ /* webpackMode: "lazy" */ 'alasql');
+
+export const databaseName = "statistics";
+export const historyTableName = "history";
 
 const databaseInitialised = new Promise((resolve, reject) => {
     const dbOpenRequest = window.indexedDB.open(databaseName);
@@ -13,29 +15,26 @@ const databaseInitialised = new Promise((resolve, reject) => {
     };
 });
 
-function getStats() {
-    return import(/* webpackChunkName: "stats" */ './stats').then(() => {
-        statsSection.show();
-        importSection.hide();
-    });
-}
-
-function getHistory() {
-    return import(/* webpackChunkName: "importHistory" */ './import_history').then(() => {
-        statsSection.hide();
-        importSection.show();
-    });
-}
-
 databaseInitialised.then(() => {
-    getStats();
+    vueApp.mode = 1;
 }).catch(() => {
-    getHistory();
+    vueApp.mode = 2;
 });
 
-module.exports = {
-    databaseName, historyTableName,
-    getStats,
-    statsSection,
-    alaSqlPromise: import(/* webpackChunkName: "alasql" */ /* webpackMode: "lazy" */ 'alasql')
-};
+// noinspection JSUnusedGlobalSymbols
+export const vueApp = new Vue({
+    el: '#app',
+    data() {
+        return {
+            mode: -1
+        }
+    },
+    render(h) {
+        return h(App, {
+            props: {
+                mode: this.mode
+            }
+        });
+    }
+});
+window.vueApp = vueApp;

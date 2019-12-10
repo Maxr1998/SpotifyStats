@@ -35,6 +35,7 @@ databaseInitialised.then(() => {
 
 module.exports = {
     databaseName, historyTableName,
-    getStats, getHistory,
+    getStats,
+    statsSection,
     alaSqlPromise: import(/* webpackChunkName: "alasql" */ /* webpackMode: "lazy" */ 'alasql')
 };

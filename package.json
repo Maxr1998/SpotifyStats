@@ -12,7 +12,8 @@
   "dependencies": {
     "@babel/runtime": "^7.7.6",
     "alasql": "^0.5.1",
-    "jszip": "^3.2.2"
+    "jszip": "^3.2.2",
+    "pretty-ms": "^5.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.7.5",

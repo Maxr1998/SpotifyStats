@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import vuetify from './plugins/vuetify';
 import App from './App.vue'
 
 export const alaSqlPromise = import(/* webpackChunkName: "alasql" */ /* webpackMode: "lazy" */ 'alasql');
@@ -23,6 +24,7 @@ databaseInitialised.then(() => {
 
 // noinspection JSUnusedGlobalSymbols
 export const vueApp = new Vue({
+    vuetify,
     el: '#app',
     data() {
         return {

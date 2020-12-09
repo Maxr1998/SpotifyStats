@@ -1,7 +1,26 @@
 # SpotifyStats - WIP
+
 A Vue.js-based web app to analyze your Spotify GDPR data-dump locally on your machine.
 
-### License
+## Build Setup
+
+```bash
+# install dependencies
+$ yarn install
+
+# serve with hot reload at localhost:3000
+$ yarn dev
+
+# build for production and launch server
+$ yarn build
+$ yarn start
+
+# generate static project
+$ yarn generate
+```
+
+## License
+
 ```
 SpotifyStats - a web app to anlyze your Spotify data-dump
 Copyright (C) 2019  Maxr1998

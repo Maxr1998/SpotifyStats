@@ -1,39 +1,26 @@
 {
   "name": "spotifystats",
   "version": "1.0.0",
-  "description": "",
   "private": true,
   "scripts": {
-    "start": "webpack-dev-server --open --hot --mode development",
-    "build": "webpack --mode production"
+    "dev": "nuxt-ts",
+    "build": "nuxt-ts build",
+    "start": "nuxt-ts start",
+    "generate": "nuxt-ts generate && echo 'spotifystats.maxr1998.de' > ./dist/CNAME",
+    "deploy": "push-dir --dir=dist --branch=gh-pages --cleanup"
   },
-  "author": "Maxr1998",
-  "license": "GPL-3.0-or-later",
   "dependencies": {
-    "@babel/runtime": "^7.7.6",
-    "alasql": "^0.5.1",
-    "jszip": "^3.2.2",
-    "pretty-ms": "^5.1.0",
-    "vue": "^2.6.10",
-    "vuetify": "^2.1.14"
+    "@nuxt/typescript-runtime": "^2.0.0",
+    "alasql": "^0.6.5",
+    "core-js": "^3.6.5",
+    "jszip": "^3.5.0",
+    "nuxt": "^2.14.6",
+    "pretty-ms": "^7.0.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.7.5",
-    "@babel/plugin-transform-runtime": "^7.7.5",
-    "@babel/preset-env": "^7.7.6",
-    "babel-loader": "^8.0.6",
-    "css-loader": "^3.3.0",
-    "deepmerge": "^4.2.2",
-    "fibers": "^4.0.2",
-    "html-loader": "^0.5.5",
-    "html-webpack-plugin": "^3.2.0",
-    "sass": "^1.23.7",
-    "sass-loader": "^8.0.0",
-    "vue-loader": "^15.7.2",
-    "vue-style-loader": "^4.1.2",
-    "vue-template-compiler": "^2.6.10",
-    "webpack": "^4.41.2",
-    "webpack-cli": "^3.3.10",
-    "webpack-dev-server": "^3.9.0"
+    "@nuxt/types": "^2.14.6",
+    "@nuxt/typescript-build": "^2.0.3",
+    "@nuxtjs/vuetify": "^1.11.2",
+    "push-dir": "^0.4.1"
   }
 }

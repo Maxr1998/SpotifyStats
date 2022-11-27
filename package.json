@@ -9,18 +9,21 @@
     "generate": "nuxt-ts generate && echo 'spotifystats.maxr1998.de' > ./dist/CNAME",
     "deploy": "push-dir --dir=dist --branch=gh-pages --cleanup"
   },
+  "engines": {
+    "node": "14"
+  },
   "dependencies": {
     "@nuxt/typescript-runtime": "^2.0.0",
-    "alasql": "^0.6.5",
-    "core-js": "^3.6.5",
-    "jszip": "^3.7.0",
-    "nuxt": "^2.14.6",
+    "alasql": "^2.1.7",
+    "core-js": "^3.26.1",
+    "jszip": "^3.10.1",
+    "nuxt": "^2.15.8",
     "pretty-ms": "^7.0.1"
   },
   "devDependencies": {
-    "@nuxt/types": "^2.14.6",
+    "@nuxt/types": "^2.15.8",
     "@nuxt/typescript-build": "^2.0.3",
-    "@nuxtjs/vuetify": "^1.11.2",
+    "@nuxtjs/vuetify": "^1.12.3",
     "push-dir": "^0.4.1"
   }
 }

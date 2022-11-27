@@ -34,6 +34,7 @@ import alasql from "alasql";
 import prettyMilliseconds from 'pretty-ms'
 import {databaseName, historyTableName} from '~/pages/index.vue';
 
+const currentYear = new Date().getFullYear();
 const attachStatement = 'ATTACH INDEXEDDB DATABASE ' + databaseName + '; USE ' + databaseName + '; ';
 
 class Stats {
@@ -58,12 +59,12 @@ interface Track {
 export default Vue.extend({
   data() {
     return {
-      years: Array.from({length: 6}, (value, key) => (2020 - key).toString()),
+      years: Array.from({length: 6}, (value, key) => (currentYear - key).toString()),
       stats: new Stats(),
     };
   },
   async beforeMount() {
-    this.refreshData("2020");
+    this.refreshData(currentYear.toString());
   },
   methods: {
     async refreshData(year: string) {

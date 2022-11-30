@@ -29,30 +29,30 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import alasql from "alasql";
+import Vue from 'vue'
+import alasql from "alasql"
 import prettyMilliseconds from 'pretty-ms'
-import {databaseName, historyTableName} from '~/pages/index.vue';
+import {databaseName, historyTableName} from '~/pages/index.vue'
 
-const currentYear = new Date().getFullYear();
-const attachStatement = 'ATTACH INDEXEDDB DATABASE ' + databaseName + '; USE ' + databaseName + '; ';
+const currentYear = new Date().getFullYear()
+const attachStatement = `ATTACH INDEXEDDB DATABASE ${databaseName};USE ${databaseName};`
 
 class Stats {
-  loaded: Boolean = false;
-  playTimeMs: Number = 0;
-  artists: Array<Artist> = [];
-  tracks: Array<Track> = [];
+  loaded: boolean = false
+  playTimeMs: number = 0
+  artists: Array<Artist> = []
+  tracks: Array<Track> = []
 }
 
 interface Artist {
-  name: String
-  playTimeMs: Number
-  playTimeString: String
+  name: string
+  playTimeMs: number
+  playTimeString: string
 }
 
 interface Track {
-  name: String
-  playCount: Number
+  name: string
+  playCount: number
 }
 
 // noinspection JSUnusedGlobalSymbols
@@ -61,50 +61,65 @@ export default Vue.extend({
     return {
       years: Array.from({length: 6}, (value, key) => (currentYear - key).toString()),
       stats: new Stats(),
-    };
+    }
   },
   async beforeMount() {
-    this.refreshData(currentYear.toString());
+    await this.refreshData(currentYear.toString())
   },
   methods: {
     async refreshData(year: string) {
-      const stats = this.stats;
-      stats.loaded = false;
+      const stats = this.stats
+      stats.loaded = false
 
-      const playTimeQuery = alasql.promise(`${attachStatement}
-        SELECT SUM(msPlayed) AS playTime FROM ${historyTableName}
-        WHERE endTime LIKE "${year}%"`);
-      const artistQuery = alasql.promise(`${attachStatement}
-        SELECT artistName, SUM(msPlayed) AS playTime FROM ${historyTableName}
-        WHERE endTime LIKE "${year}%"
-        GROUP BY artistName ORDER BY playTime DESC;`);
-      const topTracksQuery = alasql.promise(`${attachStatement}
-        SELECT trackName, COUNT(*) AS playCount FROM ${historyTableName}
-        WHERE endTime LIKE "${year}%"
-        GROUP BY trackName, artistName ORDER BY playCount DESC;`);
-      const artistCountQuery = alasql.promise(`${attachStatement}
-        SELECT artistName, COUNT(*) AS playCount FROM ${historyTableName}
-        WHERE endTime LIKE "${year}%"
-        GROUP BY artistName ORDER BY playCount DESC;`);
+      const playTimeQuery = alasql.promise(`
+        ${attachStatement}
+        SELECT SUM(ms_played) AS playTime
+        FROM ${historyTableName}
+        WHERE ts LIKE "${year}%"`
+      )
+      const artistQuery = alasql.promise(`
+        ${attachStatement}
+        SELECT artist, SUM(ms_played) AS playTime
+        FROM ${historyTableName}
+        WHERE ts LIKE "${year}%"
+        GROUP BY artist
+        ORDER BY playTime DESC;`
+      )
+      const topTracksQuery = alasql.promise(`
+        ${attachStatement}
+        SELECT track, COUNT(*) AS playCount
+        FROM ${historyTableName}
+        WHERE ts LIKE "${year}%"
+        GROUP BY track, artist
+        ORDER BY playCount DESC;`
+      )
+      const artistCountQuery = alasql.promise(`
+        ${attachStatement}
+        SELECT artist, COUNT(*) AS playCount
+        FROM ${historyTableName}
+        WHERE ts LIKE "${year}%"
+        GROUP BY artist
+        ORDER BY playCount DESC;`
+      )
 
-      stats.playTimeMs = (await playTimeQuery)[2][0].playTime;
+      stats.playTimeMs = (await playTimeQuery)[2][0].playTime
       stats.artists = (await artistQuery)[2].map((v: any) => ({
-        name: v.artistName,
+        name: v.artist,
         playTimeMs: v.playTime,
         playTimeString: prettyMilliseconds(v.playTime, {
           secondsDecimalDigits: 0,
           colonNotation: false
         }),
-      } as Artist));
+      } as Artist))
       stats.tracks = (await topTracksQuery)[2].map((v: any) => ({
-        name: v.trackName,
+        name: v.track,
         playCount: v.playCount,
-      } as Track));
+      } as Track))
 
-      stats.loaded = true;
+      stats.loaded = true
     }
   }
-});
+})
 </script>
 
 <style type="text/scss">

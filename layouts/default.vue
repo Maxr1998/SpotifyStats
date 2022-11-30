@@ -10,7 +10,7 @@
       </v-container>
     </v-main>
     <v-footer app absolute>
-      <span>&copy; {{ new Date().getFullYear() }}</span>
+      <span>Made by <a href="https://maxr1998.de">Maxr1998</a>.</span>
     </v-footer>
   </v-app>
 </template>

@@ -5,6 +5,11 @@
     <v-select :items="this.years" :value="this.years[0]" v-on:change="refreshData" solo/>
 
     <v-card :loading="!this.stats.loaded" class="mb-5">
+      <v-card-title>Total play time</v-card-title>
+      <v-card-text>{{ this.stats.playTimeString }}</v-card-text>
+    </v-card>
+
+    <v-card :loading="!this.stats.loaded" class="mb-5">
       <v-card-title>My top artists</v-card-title>
       <v-list-item v-for="(artist, i) in this.stats.artists.slice(0,10)" :key="i">
         <div class="v-list-number" v-text="i + 1"/>
@@ -40,6 +45,7 @@ const attachStatement = `ATTACH INDEXEDDB DATABASE ${databaseName};USE ${databas
 class Stats {
   loaded: boolean = false
   playTimeMs: number = 0
+  playTimeString: string = ''
   artists: Array<Artist> = []
   tracks: Array<Track> = []
 }
@@ -103,6 +109,10 @@ export default Vue.extend({
       )
 
       stats.playTimeMs = (await playTimeQuery)[2][0].playTime
+      stats.playTimeString = prettyMilliseconds(stats.playTimeMs, {
+        secondsDecimalDigits: 0,
+        colonNotation: false
+      })
       stats.artists = (await artistQuery)[2].map((v: any) => ({
         name: v.artist,
         playTimeMs: v.playTime,

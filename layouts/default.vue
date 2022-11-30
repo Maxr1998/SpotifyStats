@@ -5,6 +5,9 @@
                        @click="$router.push('/')"
                        style="cursor:pointer"/>
       <v-spacer/>
+      <v-btn icon href="//github.com/Maxr1998/SpotifyStats" target="_blank">
+        <v-icon>mdi-github</v-icon>
+      </v-btn>
     </v-app-bar>
     <v-main>
       <v-container>

@@ -10,7 +10,7 @@
       </v-container>
     </v-main>
     <v-footer app absolute>
-      <span>Made by <a href="https://maxr1998.de">Maxr1998</a>.</span>
+      <span>Made by <a href="https://maxr1998.de">Maxr1998</a>. This site is not affiliated with Spotify AB.</span>
     </v-footer>
   </v-app>
 </template>

@@ -96,6 +96,7 @@ export default Vue.extend({
         SELECT track, COUNT(*) AS playCount
         FROM ${historyTableName}
         WHERE ts LIKE "${year}%"
+          AND ms_played > 3000
         GROUP BY track, artist
         ORDER BY playCount DESC;`
       )
@@ -104,6 +105,7 @@ export default Vue.extend({
         SELECT artist, COUNT(*) AS playCount
         FROM ${historyTableName}
         WHERE ts LIKE "${year}%"
+          AND ms_played > 3000
         GROUP BY artist
         ORDER BY playCount DESC;`
       )

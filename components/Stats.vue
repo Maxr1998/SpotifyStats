@@ -1,8 +1,12 @@
 <template>
   <v-container>
-    <v-btn block x-large to="import" class="mb-5">Reimport archive</v-btn>
+    <v-btn block class="mb-5" to="import" x-large>Reimport archive</v-btn>
 
-    <v-select :items="this.years" :value="this.years[0]" v-on:change="refreshData" solo/>
+    <v-select
+      :items="this.stats.years ?? [currentYear]"
+      :value="this.stats.years ? this.stats.years[0] : currentYear"
+      solo
+      v-on:change="refreshData"/>
 
     <v-card :loading="!this.stats.loaded" class="mb-5">
       <v-card-title>Total play time</v-card-title>
@@ -39,11 +43,11 @@ import alasql from "alasql"
 import prettyMilliseconds from 'pretty-ms'
 import {databaseName, historyTableName} from '~/pages/index.vue'
 
-const currentYear = new Date().getFullYear()
 const attachStatement = `ATTACH INDEXEDDB DATABASE ${databaseName};USE ${databaseName};`
 
 class Stats {
   loaded: boolean = false
+  years: Array<number> | null = null
   playTimeMs: number = 0
   playTimeString: string = ''
   artists: Array<Artist> = []
@@ -65,23 +69,29 @@ interface Track {
 export default Vue.extend({
   data() {
     return {
-      years: Array.from({length: 6}, (value, key) => (currentYear - key).toString()),
+      currentYear: new Date().getFullYear(),
       stats: new Stats(),
     }
   },
   async beforeMount() {
-    await this.refreshData(currentYear.toString())
+    await this.refreshData(this.currentYear)
   },
   methods: {
-    async refreshData(year: string) {
+    async refreshData(year: number) {
       const stats = this.stats
       stats.loaded = false
 
+      const yearsQuery = alasql.promise(`
+        ${attachStatement}
+        SELECT DISTINCT SUBSTRING(ts, 1, 4) ::number AS year
+        FROM ${historyTableName}
+        ORDER BY year DESC;`
+      )
       const playTimeQuery = alasql.promise(`
         ${attachStatement}
         SELECT SUM(ms_played) AS playTime
         FROM ${historyTableName}
-        WHERE ts LIKE "${year}%"`
+        WHERE ts LIKE "${year}%";`
       )
       const artistQuery = alasql.promise(`
         ${attachStatement}
@@ -110,6 +120,7 @@ export default Vue.extend({
         ORDER BY playCount DESC;`
       )
 
+      stats.years = (await yearsQuery)[2].map((v: any) => v.year)
       stats.playTimeMs = (await playTimeQuery)[2][0].playTime
       stats.playTimeString = prettyMilliseconds(stats.playTimeMs, {
         secondsDecimalDigits: 0,

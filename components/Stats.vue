@@ -121,7 +121,7 @@ export default Vue.extend({
       )
 
       stats.years = (await yearsQuery)[2].map((v: any) => v.year)
-      stats.playTimeMs = (await playTimeQuery)[2][0].playTime
+      stats.playTimeMs = (await playTimeQuery)[2][0]['playTime']
       stats.playTimeString = prettyMilliseconds(stats.playTimeMs, {
         secondsDecimalDigits: 0,
         colonNotation: false
@@ -145,7 +145,8 @@ export default Vue.extend({
 })
 </script>
 
-<style type="text/scss">
+<style>
+/*noinspection CssUnusedSymbol*/
 .v-list-item > .v-list-number {
   min-width: 48px;
   padding-right: 16px;

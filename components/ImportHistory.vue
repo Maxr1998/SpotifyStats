@@ -1,5 +1,14 @@
 <template>
-  <input ref="data" accept="application/zip" type="file" @change="handleFiles()">
+  <div>
+    <input ref="data" accept="application/zip" type="file" @change="handleFiles()">
+
+    <v-snackbar
+      v-model="error"
+      :timeout="2000"
+      color="error">
+      No streaming history files found in the zip file
+    </v-snackbar>
+  </div>
 </template>
 
 <script lang="ts">
@@ -12,6 +21,11 @@ const attachStatement = `ATTACH INDEXEDDB DATABASE ${databaseName};USE ${databas
 
 // noinspection JSUnusedGlobalSymbols
 export default Vue.extend({
+  data() {
+    return {
+      error: false,
+    }
+  },
   methods: {
     handleFiles() {
       const zipFile = (this.$refs.data as any).files[0]
@@ -36,6 +50,9 @@ export default Vue.extend({
               'ts',
             ]
           )
+        } else {
+          console.log("No streaming history files found in zip")
+          this.error = true
         }
       })
     },

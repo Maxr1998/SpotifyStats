@@ -10,19 +10,19 @@
     "deploy": "push-dir --dir=dist --branch=gh-pages --cleanup"
   },
   "engines": {
-    "node": "14"
+    "node": "18"
   },
   "dependencies": {
     "@nuxt/typescript-runtime": "^2.0.0",
     "alasql": "~2.1.8",
     "core-js": "^3.26.1",
     "jszip": "^3.10.1",
-    "nuxt": "^2.16.3",
+    "nuxt": "^2.17.3",
     "pretty-ms": "^7.0.1"
   },
   "devDependencies": {
-    "@nuxt/types": "^2.16.3",
-    "@nuxt/typescript-build": "^2.0.3",
+    "@nuxt/types": "^2.17.3",
+    "@nuxt/typescript-build": "^3.0.2",
     "@nuxtjs/vuetify": "^1.12.3",
     "push-dir": "^0.4.1"
   }

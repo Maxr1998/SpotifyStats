@@ -1,5 +1,5 @@
 <template>
-  <input @change="handleFiles()" ref="data" type="file" accept="application/zip">
+  <input ref="data" accept="application/zip" type="file" @change="handleFiles()">
 </template>
 
 <script lang="ts">
@@ -19,7 +19,9 @@ export default Vue.extend({
 
       JSZip.loadAsync(zipFile).then((zip) => {
         const streamingHistoryFiles = zip.filter((relPath, _) => relPath.includes('StreamingHistory') && relPath.endsWith('.json'))
-        const extendedStreamingHistoryFiles = zip.filter((relPath, _) => relPath.includes('endsong_') && relPath.endsWith('.json'))
+        const extendedStreamingHistoryFiles = zip.filter((relPath, _) =>
+          (relPath.includes('endsong_') || relPath.includes('Streaming_History_Audio')) && relPath.endsWith('.json')
+        )
         if (streamingHistoryFiles.length > 0) {
           this.importHistory(streamingHistoryFiles, [null, 'artistName', 'trackName', null, 'msPlayed', 'endTime'])
         } else if (extendedStreamingHistoryFiles.length > 0) {

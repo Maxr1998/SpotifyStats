@@ -6,8 +6,7 @@
     "dev": "nuxt-ts",
     "build": "nuxt-ts build",
     "start": "nuxt-ts start",
-    "generate": "nuxt-ts generate && echo 'spotifystats.maxr1998.de' > ./dist/CNAME",
-    "deploy": "push-dir --dir=dist --branch=gh-pages --cleanup"
+    "generate": "nuxt-ts generate && echo 'spotifystats.maxr1998.de' > ./dist/CNAME"
   },
   "engines": {
     "node": "18"
@@ -23,7 +22,6 @@
   "devDependencies": {
     "@nuxt/types": "^2.17.3",
     "@nuxt/typescript-build": "^3.0.2",
-    "@nuxtjs/vuetify": "^1.12.3",
-    "push-dir": "^0.4.1"
+    "@nuxtjs/vuetify": "^1.12.3"
   }
 }

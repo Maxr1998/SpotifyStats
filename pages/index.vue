@@ -12,37 +12,19 @@
   </v-container>
 </template>
 
-<script lang="ts">
-import Vue from 'vue';
+<script lang="ts" setup>
+import {databaseName, historyTableName} from '~/utils/constants'
 
-export const databaseName = "statistics";
-export const historyTableName = "history";
+const loaded = ref(-1)
 
-// noinspection JSUnusedGlobalSymbols
-export default Vue.extend({
-  data() {
-    return {
-      loaded: -1
-    }
-  },
-  async created() {
-    const dbOpenRequest = window.indexedDB.open(databaseName);
-    dbOpenRequest.onsuccess = (sender: any) => {
-      this.loaded = (sender.target.result.objectStoreNames.contains(historyTableName)) ? 1 : 2;
-      dbOpenRequest.result.close();
-    };
-    dbOpenRequest.onerror = () => {
-      this.loaded = 2;
-    };
-  },
-  methods: {
-    showStats() {
-      this.loaded = 1;
-    }
+onBeforeMount(async () => {
+  const dbOpenRequest = window.indexedDB.open(databaseName)
+  dbOpenRequest.onsuccess = (sender: any) => {
+    loaded.value = (sender.target.result.objectStoreNames.contains(historyTableName)) ? 1 : 2;
+    dbOpenRequest.result.close();
   }
-});
+  dbOpenRequest.onerror = () => {
+    loaded.value = 2;
+  }
+})
 </script>
-
-<style lang="scss" scoped>
-@import '~vuetify/src/styles/styles.sass';
-</style>

@@ -21,15 +21,12 @@
   </v-container>
 </template>
 
-<script lang="ts">
-import Vue from "vue";
+<script lang="ts" setup>
+useHead({
+    title: 'Import archive',
+})
 
-// noinspection JSUnusedGlobalSymbols
-export default Vue.extend({
-  methods: {
-    showStats() {
-      this.$nuxt.$router.replace('/')
-    }
-  }
-});
+function showStats() {
+    useNuxtApp().$router.replace('/')
+}
 </script>

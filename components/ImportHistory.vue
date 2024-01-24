@@ -3,73 +3,74 @@
     <input ref="data" accept="application/zip" type="file" @change="handleFiles()">
 
     <v-snackbar
-      v-model="error"
-      :timeout="2000"
-      color="error">
+        v-model="error"
+        :timeout="2000"
+        color="error">
       No streaming history files found in the zip file
     </v-snackbar>
   </div>
 </template>
 
-<script lang="ts">
-import Vue from 'vue'
+<script lang="ts" setup>
 import JSZip, {JSZipObject} from 'jszip'
 import alasql from 'alasql'
-import {databaseName, historyTableName} from '~/pages/index.vue'
+import {databaseName, historyTableName} from '~/utils/constants'
 
 const attachStatement = `ATTACH INDEXEDDB DATABASE ${databaseName};USE ${databaseName};`
 
-// noinspection JSUnusedGlobalSymbols
-export default Vue.extend({
-  data() {
-    return {
-      error: false,
-    }
-  },
-  methods: {
-    handleFiles() {
-      const zipFile = (this.$refs.data as any).files[0]
-      console.log("Received zip file " + zipFile.name)
+const data = ref<any>(null)
+const error = ref(false)
 
-      JSZip.loadAsync(zipFile).then((zip) => {
+const emit = defineEmits({
+    success: () => true,
+})
+
+function handleFiles() {
+    const zipFile = data.value.files[0]
+    console.log(typeof data.value)
+    console.log("Received zip file " + zipFile.name)
+
+    JSZip.loadAsync(zipFile).then((zip) => {
         const streamingHistoryFiles = zip.filter((relPath, _) => relPath.includes('StreamingHistory') && relPath.endsWith('.json'))
         const extendedStreamingHistoryFiles = zip.filter((relPath, _) =>
-          (relPath.includes('endsong_') || relPath.includes('Streaming_History_Audio')) && relPath.endsWith('.json')
+            (relPath.includes('endsong_') || relPath.includes('Streaming_History_Audio')) && relPath.endsWith('.json')
         )
         if (streamingHistoryFiles.length > 0) {
-          this.importHistory(streamingHistoryFiles, [null, 'artistName', 'trackName', null, 'msPlayed', 'endTime'])
+            importHistory(streamingHistoryFiles, [null, 'artistName', 'trackName', null, 'msPlayed', 'endTime'])
         } else if (extendedStreamingHistoryFiles.length > 0) {
-          this.importHistory(
-            extendedStreamingHistoryFiles,
-            [
-              'spotify_track_uri',
-              'master_metadata_album_artist_name',
-              'master_metadata_track_name',
-              'master_metadata_album_album_name',
-              'ms_played',
-              'ts',
-            ]
-          )
+            importHistory(
+                extendedStreamingHistoryFiles,
+                [
+                    'spotify_track_uri',
+                    'master_metadata_album_artist_name',
+                    'master_metadata_track_name',
+                    'master_metadata_album_album_name',
+                    'ms_played',
+                    'ts',
+                ]
+            )
         } else {
-          console.log("No streaming history files found in zip")
-          this.error = true
+            console.log("No streaming history files found in zip")
+            error.value = true
         }
-      })
-    },
-    async importHistory(historyFiles: JSZipObject[], columns: (string | null)[]) {
-      await alasql.promise(`
-          CREATE INDEXEDDB DATABASE IF NOT EXISTS ${databaseName};
-          ${attachStatement}
-          DROP TABLE IF EXISTS ${historyTableName};
-          CREATE TABLE ${historyTableName};`
-      )
-      for (const historyFile of historyFiles) {
+    })
+}
+
+async function importHistory(historyFiles: JSZipObject[], columns: (string | null)[]) {
+    await alasql.promise(`
+        CREATE INDEXEDDB DATABASE IF NOT EXISTS ${databaseName};
+        ${attachStatement}
+        DROP TABLE IF EXISTS ${historyTableName};
+        CREATE TABLE ${historyTableName};`
+    )
+    for (const historyFile of historyFiles) {
         console.log("Importing " + historyFile.name)
         const historyJson = await historyFile.async("string")
         const history = JSON.parse(historyJson)
-        await alasql.promise(`
-            ${attachStatement}
-            SELECT ${columns[0]} as uri,
+        // noinspection SqlNoDataSourceInspection
+        await alasql.promise(
+            `${attachStatement}
+            SELECT ${columns[0]} AS uri,
                    ${columns[1]} AS artist,
                    ${columns[2]} AS track,
                    ${columns[3]} as album,
@@ -77,11 +78,9 @@ export default Vue.extend({
                    ${columns[5]} AS ts
             INTO ${historyTableName}
             FROM ?;`,
-          [history],
+            [history],
         )
-      }
-      this.$emit("success")
     }
-  }
-})
+    emit("success")
+}
 </script>

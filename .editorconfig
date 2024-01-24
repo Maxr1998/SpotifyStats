@@ -5,11 +5,20 @@ end_of_line = lf
 insert_final_newline = true
 ij_visual_guides = 120
 
+[*.{ts,js,json}]
+charset = utf-8
+indent_style = space
+indent_size = 4
+trim_trailing_whitespace = true
+
 [*.vue]
 charset = utf-8
-indent_size = 2
 indent_style = space
-
-[*.{json, config.js}]
-indent_size = 2
-indent_style = space
+indent_size = unset
+ij_html_indent_size = 2
+ij_html_continuation_indent_size = 4
+ij_javascript_indent_size = 4
+ij_javascript_continuation_indent_size = 4
+ij_typescript_indent_size = 4
+ij_typescript_continuation_indent_size = 4
+ij_css_indent_size = 4

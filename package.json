@@ -1,27 +1,26 @@
 {
-  "name": "spotifystats",
-  "version": "1.0.0",
-  "private": true,
-  "scripts": {
-    "dev": "nuxt-ts",
-    "build": "nuxt-ts build",
-    "start": "nuxt-ts start",
-    "generate": "nuxt-ts generate && echo 'spotifystats.maxr1998.de' > ./dist/CNAME"
-  },
-  "engines": {
-    "node": "18"
-  },
-  "dependencies": {
-    "@nuxt/typescript-runtime": "^2.0.0",
-    "alasql": "~2.1.8",
-    "core-js": "^3.26.1",
-    "jszip": "^3.10.1",
-    "nuxt": "^2.17.3",
-    "pretty-ms": "^7.0.1"
-  },
-  "devDependencies": {
-    "@nuxt/types": "^2.17.3",
-    "@nuxt/typescript-build": "^3.0.2",
-    "@nuxtjs/vuetify": "^1.12.3"
-  }
+    "name": "spotifystats",
+    "version": "1.0.0",
+    "private": true,
+    "scripts": {
+        "dev": "nuxt dev",
+        "build": "nuxt build",
+        "generate": "nuxt generate && echo 'spotifystats.maxr1998.de' > ./dist/CNAME"
+    },
+    "engines": {
+        "node": "18"
+    },
+    "dependencies": {
+        "alasql": "~2.1.8",
+        "core-js": "^3.26.1",
+        "jszip": "^3.10.1",
+        "pretty-ms": "^7.0.1",
+        "vuetify": "^3.3.1"
+    },
+    "devDependencies": {
+        "@mdi/js": "^7.4.47",
+        "@types/node": "^18",
+        "nuxt": "^3.9.3",
+        "vite-plugin-vuetify": "^2.0.1"
+    }
 }

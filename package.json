@@ -11,7 +11,7 @@
         "node": "18"
     },
     "dependencies": {
-        "alasql": "~2.1.8",
+        "alasql": "4.1.2",
         "core-js": "^3.26.1",
         "jszip": "^3.10.1",
         "pretty-ms": "^7.0.1",

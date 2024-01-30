@@ -27,7 +27,6 @@ const emit = defineEmits({
 
 function handleFiles() {
     const zipFile = data.value.files[0]
-    console.log(typeof data.value)
     console.log("Received zip file " + zipFile.name)
 
     JSZip.loadAsync(zipFile).then((zip) => {

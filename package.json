@@ -20,7 +20,7 @@
     "devDependencies": {
         "@mdi/js": "^7.4.47",
         "@types/node": "^18",
-        "nuxt": "^3.9.3",
+        "nuxt": "^3.12.4",
         "vite-plugin-vuetify": "^2.0.1"
     }
 }
